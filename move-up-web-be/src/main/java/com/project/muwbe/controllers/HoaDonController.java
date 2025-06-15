@@ -104,14 +104,14 @@ public class HoaDonController {
 
             hoaDonRepository.save(hoaDon);
 
-            for (AdminHoaDonForm.AdminChiTietHoaDon chiTietForm : form.getChiTietHoaDon()) {
-                ChiTietHoaDon chiTiet = new ChiTietHoaDon();
-                chiTiet.setHoaDon(hoaDon);
-                chiTiet.setChiTietGiay(chiTietGiayRepository.findById(chiTietForm.getIdChiTietGiay()).orElseThrow().getChiTietGiay());
-                chiTiet.setSoLuong(chiTietForm.getSoLuong());
-                chiTiet.setThanhTien(chiTietForm.getThanhTien());
-                chiTietHoaDonRepository.save(chiTiet);
-            }
+//            for (AdminHoaDonForm.AdminChiTietHoaDon chiTietForm : form.getChiTietHoaDon()) {
+//                ChiTietHoaDon chiTiet = new ChiTietHoaDon();
+//                chiTiet.setHoaDon(hoaDon);
+//                chiTiet.setChiTietGiay(chiTietGiayRepository.findById(chiTietForm.getIdChiTietGiay()).orElseThrow().getChiTietGiay());
+//                chiTiet.setSoLuong(chiTietForm.getSoLuong());
+//                chiTiet.setThanhTien(chiTietForm.getThanhTien());
+//                chiTietHoaDonRepository.save(chiTiet);
+//            }
 
             return ResponseEntity.ok().body("Hóa đơn được tạo thành công");
         } catch (Exception e) {

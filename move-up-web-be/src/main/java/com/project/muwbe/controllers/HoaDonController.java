@@ -104,16 +104,19 @@ public class HoaDonController {
 
             hoaDonRepository.save(hoaDon);
 
-//            for (AdminHoaDonForm.AdminChiTietHoaDon chiTietForm : form.getChiTietHoaDon()) {
-//                ChiTietHoaDon chiTiet = new ChiTietHoaDon();
-//                chiTiet.setHoaDon(hoaDon);
-//                chiTiet.setChiTietGiay(chiTietGiayRepository.findById(chiTietForm.getIdChiTietGiay()).orElseThrow().getChiTietGiay());
-//                chiTiet.setSoLuong(chiTietForm.getSoLuong());
-//                chiTiet.setThanhTien(chiTietForm.getThanhTien());
-//                chiTietHoaDonRepository.save(chiTiet);
-//            }
-
+            for (AdminHoaDonForm.AdminChiTietHoaDon chiTietForm : form.getChiTietHoaDon()) {
+                ChiTietHoaDon chiTiet = new ChiTietHoaDon();
+                chiTiet.setHoaDon(hoaDon);
+                chiTiet.setChiTietGiay(chiTietGiayRepository.findById(chiTietForm.getIdChiTietGiay()).orElseThrow(() -> new NoSuchElementException("Không tìm thấy chi tiết giày với ID: " + chiTietForm.getIdChiTietGiay())));
+                chiTiet.setSoLuong(chiTietForm.getSoLuong());
+                chiTiet.setThanhTien(chiTietForm.getThanhTien());
+                chiTietHoaDonRepository.save(chiTiet);
+            }
             return ResponseEntity.ok().body("Hóa đơn được tạo thành công");
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

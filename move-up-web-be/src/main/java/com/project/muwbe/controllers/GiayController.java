@@ -1,6 +1,5 @@
 package com.project.muwbe.controllers;
 
-import com.project.muwbe.dtos.responses.AdminChiTietGiay;
 import com.project.muwbe.dtos.responses.AdminGiay;
 import com.project.muwbe.entities.Giay;
 import com.project.muwbe.repositories.GiayRepository;

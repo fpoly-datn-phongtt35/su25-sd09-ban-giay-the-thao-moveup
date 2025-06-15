@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/khach-hang")
+@CrossOrigin(origins = "*")
 public class KhachHangController {
 
     @Autowired

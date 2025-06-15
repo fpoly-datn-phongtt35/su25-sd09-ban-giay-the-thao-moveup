@@ -22,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/phieu-giam-gia")
+@CrossOrigin(origins = "*")
 public class PhieuGiamGiaController {
 
     @Autowired

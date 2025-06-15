@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PhieuGiamGiaRequest {
+public class AdminPhieuGiamGiaForm {
 
     @NotNull(message = "Mã giảm giá không được để trống!")
     private String maGiamGia;

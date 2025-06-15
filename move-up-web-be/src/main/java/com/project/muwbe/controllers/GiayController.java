@@ -1,6 +1,6 @@
 package com.project.muwbe.controllers;
 
-import com.project.muwbe.dtos.responses.AdminGiay;
+import com.project.muwbe.dtos.responses.AdminGiayList;
 import com.project.muwbe.entities.Giay;
 import com.project.muwbe.repositories.GiayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,7 @@ public class GiayController {
         Sort.Direction direction = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(direction, sortBy));
         Page<Giay> list = giayRepository.findAll(pageable);
-        Page<AdminGiay> results = list.map(AdminGiay::new);
+        Page<AdminGiayList> results = list.map(AdminGiayList::new);
         return ResponseEntity.ok(results);
     }
-
 }

@@ -5,13 +5,12 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
 @Getter
 @Setter
-public class KhachHangRequest {
+public class AdminKhachHangForm {
 
     @NotNull(message = "Mã khách hàng không được để trống!")
     private String maKhachHang;

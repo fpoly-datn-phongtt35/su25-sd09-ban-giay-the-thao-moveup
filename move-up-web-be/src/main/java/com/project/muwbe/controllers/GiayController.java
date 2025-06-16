@@ -1,5 +1,5 @@
 package com.project.muwbe.controllers;
-import com.project.muwbe.dtos.requests.GiayRequest;
+import com.project.muwbe.dtos.requests.AdminGiayForm;
 import com.project.muwbe.dtos.responses.AdminGiayList;
 import com.project.muwbe.entities.ChiTietGiay;
 import com.project.muwbe.entities.DanhMuc;
@@ -67,10 +67,9 @@ public class GiayController {
         }
     }
 
-    // Create a new product
     @Transactional
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody GiayRequest form) {
+    public ResponseEntity<?> create(@Valid @RequestBody AdminGiayForm form) {
         try {
             if (giayRepository.findByTenSanPham(form.getTenSanPham()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -104,7 +103,7 @@ public class GiayController {
             Giay savedGiay = giayRepository.save(giay);
 
             if (form.getChiTietGiay() != null && !form.getChiTietGiay().isEmpty()) {
-                for (GiayRequest.ChiTietGiay chiTietForm : form.getChiTietGiay()) {
+                for (AdminGiayForm.ChiTietGiay chiTietForm : form.getChiTietGiay()) {
                     ChiTietGiay chiTiet = new ChiTietGiay();
                     chiTiet.setGiay(savedGiay);
                     chiTiet.setSku(chiTietForm.getSku());
@@ -129,12 +128,11 @@ public class GiayController {
 
     @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody GiayRequest form) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody AdminGiayForm form) {
         try {
             Giay giay = giayRepository.findById(id)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy giày với ID: " + id));
 
-            // Check if another product with the same name exists
             Optional<Giay> existingGiay = giayRepository.findByTenSanPham(form.getTenSanPham());
             if (existingGiay.isPresent() && !existingGiay.get().getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -171,7 +169,7 @@ public class GiayController {
             chiTietGiayRepository.deleteByGiayId(id);
 
             if (form.getChiTietGiay() != null && !form.getChiTietGiay().isEmpty()) {
-                for (GiayRequest.ChiTietGiay chiTietForm : form.getChiTietGiay()) {
+                for (AdminGiayForm.ChiTietGiay chiTietForm : form.getChiTietGiay()) {
                     ChiTietGiay chiTiet = new ChiTietGiay();
                     chiTiet.setGiay(giay);
                     chiTiet.setSku(chiTietForm.getSku());

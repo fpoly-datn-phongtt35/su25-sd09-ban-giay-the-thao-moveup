@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GiayRequest {
+public class AdminGiayForm {
     private String tenSanPham;
     private String moTaSanPham;
     private Boolean trangThai;

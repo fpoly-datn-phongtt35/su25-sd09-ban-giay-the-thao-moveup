@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -44,4 +45,7 @@ public class GioHang {
     @ManyToOne
     @JoinColumn(name = "nguoi_cap_nhat", referencedColumnName = "id")
     private TaiKhoan nguoiCapNhat;
+
+    @OneToMany(mappedBy = "gioHang", fetch = FetchType.LAZY)
+    private List<ChiTietGioHang> chiTietGioHang;
 }

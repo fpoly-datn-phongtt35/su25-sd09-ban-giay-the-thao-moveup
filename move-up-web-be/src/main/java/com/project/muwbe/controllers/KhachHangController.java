@@ -1,6 +1,6 @@
 package com.project.muwbe.controllers;
 
-import com.project.muwbe.dtos.requests.KhachHangRequest;
+import com.project.muwbe.dtos.requests.AdminKhachHangForm;
 import com.project.muwbe.entities.KhachHang;
 import com.project.muwbe.entities.TaiKhoan;
 import com.project.muwbe.repositories.KhachHangRepository;
@@ -59,7 +59,7 @@ public class KhachHangController {
 
     // Thêm mới khách hàng
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody KhachHangRequest request) {
+    public ResponseEntity<?> create(@Valid @RequestBody AdminKhachHangForm request) {
         KhachHang kh = new KhachHang();
         kh.setMaKhachHang(request.getMaKhachHang());
         kh.setHoTen(request.getHoTen());
@@ -84,7 +84,7 @@ public class KhachHangController {
 
     // Cập nhật khách hàng
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody KhachHangRequest request) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody AdminKhachHangForm request) {
         Optional<KhachHang> optional = khachHangRepository.findById(id);
         if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();

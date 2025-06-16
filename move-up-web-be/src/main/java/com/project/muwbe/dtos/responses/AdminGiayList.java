@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AdminGiay {
+public class AdminGiayList {
     private Long id;
     private String tenSanPham;
     private String moTaSanPham;
@@ -46,7 +46,7 @@ public class AdminGiay {
         private Boolean trangThai;
     }
 
-    public AdminGiay(Giay giay) {
+    public AdminGiayList(Giay giay) {
         this.id = giay.getId();
         this.tenSanPham = giay.getTenSanPham();
         this.moTaSanPham = giay.getMoTaSanPham();

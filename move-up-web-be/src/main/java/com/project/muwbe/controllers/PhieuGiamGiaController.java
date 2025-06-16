@@ -1,7 +1,7 @@
 package com.project.muwbe.controllers;
 
 
-import com.project.muwbe.dtos.requests.PhieuGiamGiaRequest;
+import com.project.muwbe.dtos.requests.AdminPhieuGiamGiaForm;
 import com.project.muwbe.entities.PhieuGiamGia;
 import com.project.muwbe.repositories.PhieuGiamGiaRepository;
 import com.project.muwbe.repositories.TaiKhoanRepository;
@@ -58,7 +58,7 @@ public class PhieuGiamGiaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody PhieuGiamGiaRequest phieuGiamGiaRequest) {
+    public ResponseEntity<?> create(@Valid @RequestBody AdminPhieuGiamGiaForm adminPhieuGiamGiaForm) {
         try {
             PhieuGiamGia phieuGiamGia = new PhieuGiamGia();
             Optional<PhieuGiamGia> existingPhieuGiamGia = phieuGiamGiaRepository.findByMaGiamGia(phieuGiamGia.getMaGiamGia());
@@ -66,19 +66,19 @@ public class PhieuGiamGiaController {
                 throw new IllegalArgumentException("Phiếu giảm giá đã tồn tại: " + phieuGiamGia.getMaGiamGia());
             }
 
-            phieuGiamGia.setMaGiamGia(phieuGiamGiaRequest.getMaGiamGia());
-            phieuGiamGia.setTenGiamGia(phieuGiamGiaRequest.getTenGiamGia());
-            phieuGiamGia.setPhanTramGiam(phieuGiamGiaRequest.getPhanTramGiam());
-            phieuGiamGia.setGiaTienGiam(phieuGiamGiaRequest.getGiaTienGiam());
-            phieuGiamGia.setGiaTriToiDa(phieuGiamGiaRequest.getGiaTriToiDa());
-            phieuGiamGia.setGiaTriToiThieu(phieuGiamGiaRequest.getGiaTriToiThieu());
-            phieuGiamGia.setSoLuong(phieuGiamGiaRequest.getSoLuong());
-            phieuGiamGia.setNgayBatDau(new Timestamp(phieuGiamGiaRequest.getNgayBatDau().getTime()));
-            phieuGiamGia.setNgayKetThuc(new Timestamp(phieuGiamGiaRequest.getNgayKetThuc().getTime()));
-            phieuGiamGia.setTrangThai(phieuGiamGiaRequest.getTrangThai());
-            phieuGiamGia.setMoTa(phieuGiamGiaRequest.getMoTa());
+            phieuGiamGia.setMaGiamGia(adminPhieuGiamGiaForm.getMaGiamGia());
+            phieuGiamGia.setTenGiamGia(adminPhieuGiamGiaForm.getTenGiamGia());
+            phieuGiamGia.setPhanTramGiam(adminPhieuGiamGiaForm.getPhanTramGiam());
+            phieuGiamGia.setGiaTienGiam(adminPhieuGiamGiaForm.getGiaTienGiam());
+            phieuGiamGia.setGiaTriToiDa(adminPhieuGiamGiaForm.getGiaTriToiDa());
+            phieuGiamGia.setGiaTriToiThieu(adminPhieuGiamGiaForm.getGiaTriToiThieu());
+            phieuGiamGia.setSoLuong(adminPhieuGiamGiaForm.getSoLuong());
+            phieuGiamGia.setNgayBatDau(new Timestamp(adminPhieuGiamGiaForm.getNgayBatDau().getTime()));
+            phieuGiamGia.setNgayKetThuc(new Timestamp(adminPhieuGiamGiaForm.getNgayKetThuc().getTime()));
+            phieuGiamGia.setTrangThai(adminPhieuGiamGiaForm.getTrangThai());
+            phieuGiamGia.setMoTa(adminPhieuGiamGiaForm.getMoTa());
             phieuGiamGia.setNgayTao(new Timestamp(System.currentTimeMillis()));
-            phieuGiamGia.setNguoiTao(taiKhoanRepository.findById(phieuGiamGiaRequest.getNguoiTao()).orElseThrow(() -> new NoSuchElementException("Không tìm thấy tài khoản với ID: " + phieuGiamGiaRequest.getNguoiTao())));
+            phieuGiamGia.setNguoiTao(taiKhoanRepository.findById(adminPhieuGiamGiaForm.getNguoiTao()).orElseThrow(() -> new NoSuchElementException("Không tìm thấy tài khoản với ID: " + adminPhieuGiamGiaForm.getNguoiTao())));
 
             phieuGiamGiaRepository.save(phieuGiamGia);
 
@@ -90,28 +90,28 @@ public class PhieuGiamGiaController {
 
     @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @PathVariable Long id, @RequestBody PhieuGiamGiaRequest phieuGiamGiaRequest) {
+    public ResponseEntity<?> update(@Valid @PathVariable Long id, @RequestBody AdminPhieuGiamGiaForm adminPhieuGiamGiaForm) {
         Optional<PhieuGiamGia> optional = phieuGiamGiaRepository.findById(id);
         if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         PhieuGiamGia phieuGiamGia = optional.get();
-        phieuGiamGia.setMaGiamGia(phieuGiamGiaRequest.getMaGiamGia());
-        phieuGiamGia.setTenGiamGia(phieuGiamGiaRequest.getTenGiamGia());
-        phieuGiamGia.setPhanTramGiam(phieuGiamGiaRequest.getPhanTramGiam());
-        phieuGiamGia.setGiaTienGiam(phieuGiamGiaRequest.getGiaTienGiam());
-        phieuGiamGia.setGiaTriToiDa(phieuGiamGiaRequest.getGiaTriToiDa());
-        phieuGiamGia.setGiaTriToiThieu(phieuGiamGiaRequest.getGiaTriToiThieu());
-        phieuGiamGia.setSoLuong(phieuGiamGiaRequest.getSoLuong());
-        phieuGiamGia.setNgayBatDau(new Timestamp(phieuGiamGiaRequest.getNgayBatDau().getTime()));
-        phieuGiamGia.setNgayKetThuc(new Timestamp(phieuGiamGiaRequest.getNgayKetThuc().getTime()));
-        phieuGiamGia.setTrangThai(phieuGiamGiaRequest.getTrangThai());
-        phieuGiamGia.setMoTa(phieuGiamGiaRequest.getMoTa());
+        phieuGiamGia.setMaGiamGia(adminPhieuGiamGiaForm.getMaGiamGia());
+        phieuGiamGia.setTenGiamGia(adminPhieuGiamGiaForm.getTenGiamGia());
+        phieuGiamGia.setPhanTramGiam(adminPhieuGiamGiaForm.getPhanTramGiam());
+        phieuGiamGia.setGiaTienGiam(adminPhieuGiamGiaForm.getGiaTienGiam());
+        phieuGiamGia.setGiaTriToiDa(adminPhieuGiamGiaForm.getGiaTriToiDa());
+        phieuGiamGia.setGiaTriToiThieu(adminPhieuGiamGiaForm.getGiaTriToiThieu());
+        phieuGiamGia.setSoLuong(adminPhieuGiamGiaForm.getSoLuong());
+        phieuGiamGia.setNgayBatDau(new Timestamp(adminPhieuGiamGiaForm.getNgayBatDau().getTime()));
+        phieuGiamGia.setNgayKetThuc(new Timestamp(adminPhieuGiamGiaForm.getNgayKetThuc().getTime()));
+        phieuGiamGia.setTrangThai(adminPhieuGiamGiaForm.getTrangThai());
+        phieuGiamGia.setMoTa(adminPhieuGiamGiaForm.getMoTa());
 
         phieuGiamGia.setNgayCapNhat(new Timestamp(System.currentTimeMillis()));
-        if (phieuGiamGiaRequest.getNguoiCapNhat() != null) {
-            taiKhoanRepository.findById(phieuGiamGiaRequest.getNguoiCapNhat()).ifPresent(phieuGiamGia::setNguoiCapNhat);
+        if (adminPhieuGiamGiaForm.getNguoiCapNhat() != null) {
+            taiKhoanRepository.findById(adminPhieuGiamGiaForm.getNguoiCapNhat()).ifPresent(phieuGiamGia::setNguoiCapNhat);
         }
 
         phieuGiamGiaRepository.save(phieuGiamGia);

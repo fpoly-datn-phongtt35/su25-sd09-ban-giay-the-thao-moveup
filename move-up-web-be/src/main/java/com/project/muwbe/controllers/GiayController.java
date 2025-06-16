@@ -1,7 +1,6 @@
 package com.project.muwbe.controllers;
-
 import com.project.muwbe.dtos.requests.GiayRequest;
-import com.project.muwbe.dtos.responses.AdminGiay;
+import com.project.muwbe.dtos.responses.AdminGiayList;
 import com.project.muwbe.entities.ChiTietGiay;
 import com.project.muwbe.entities.DanhMuc;
 import com.project.muwbe.entities.DanhMucCon;
@@ -21,11 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/giay")
@@ -43,7 +39,6 @@ public class GiayController {
     @Autowired
     private DanhMucConRepository danhMucConRepository;
 
-
     @GetMapping
     public ResponseEntity<?> findAll(
             @RequestParam(defaultValue = "1") Integer page,
@@ -54,7 +49,7 @@ public class GiayController {
         Sort.Direction direction = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(direction, sortBy));
         Page<Giay> list = giayRepository.findAll(pageable);
-        Page<AdminGiay> results = list.map(AdminGiay::new);
+        Page<AdminGiayList> results = list.map(AdminGiayList::new);
         return ResponseEntity.ok(results);
     }
 
@@ -63,7 +58,7 @@ public class GiayController {
         try {
             Giay giay = giayRepository.findById(id)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy giày với ID: " + id));
-            AdminGiay result = new AdminGiay(giay);
+            AdminGiayList result = new AdminGiayList(giay);
             return ResponseEntity.ok(result);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -72,7 +67,7 @@ public class GiayController {
         }
     }
 
-    // Thêm mới một sản phẩm giày
+    // Create a new product
     @Transactional
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody GiayRequest form) {
@@ -124,7 +119,7 @@ public class GiayController {
                 }
             }
 
-            return ResponseEntity.ok(new AdminGiay(savedGiay));
+            return ResponseEntity.ok(new AdminGiayList(savedGiay));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
@@ -139,6 +134,7 @@ public class GiayController {
             Giay giay = giayRepository.findById(id)
                     .orElseThrow(() -> new NoSuchElementException("Không tìm thấy giày với ID: " + id));
 
+            // Check if another product with the same name exists
             Optional<Giay> existingGiay = giayRepository.findByTenSanPham(form.getTenSanPham());
             if (existingGiay.isPresent() && !existingGiay.get().getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -174,7 +170,6 @@ public class GiayController {
 
             chiTietGiayRepository.deleteByGiayId(id);
 
-            // Add new ChiTietGiay
             if (form.getChiTietGiay() != null && !form.getChiTietGiay().isEmpty()) {
                 for (GiayRequest.ChiTietGiay chiTietForm : form.getChiTietGiay()) {
                     ChiTietGiay chiTiet = new ChiTietGiay();
@@ -192,7 +187,7 @@ public class GiayController {
             }
 
             Giay updatedGiay = giayRepository.save(giay);
-            return ResponseEntity.ok(new AdminGiay(updatedGiay));
+            return ResponseEntity.ok(new AdminGiayList(updatedGiay));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
@@ -200,5 +195,22 @@ public class GiayController {
         }
     }
 
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            Giay giay = giayRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy giày với ID: " + id));
+
+            chiTietGiayRepository.deleteByGiayId(id);
+
+            giayRepository.delete(giay);
+            return ResponseEntity.ok("Xóa sản phẩm thành công");
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống: " + e.getMessage());
+        }
+    }
 
 }

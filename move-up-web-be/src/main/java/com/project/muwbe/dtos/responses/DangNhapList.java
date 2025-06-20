@@ -1,5 +1,6 @@
 package com.project.muwbe.dtos.responses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.muwbe.entities.TaiKhoan;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 public class DangNhapList {
     private Long id;
     private String email;
+    @JsonIgnore
     private String matKhau;
     private Boolean vaiTro; // true = khách hàng, false = nhân viên
     private String trangThai;
@@ -23,5 +25,9 @@ public class DangNhapList {
         this.matKhau = entity.getMatKhau();
         this.vaiTro = entity.getVaiTro();
         this.trangThai = entity.getTrangThai();
+    }
+
+    public void setMatKhau(String matKhau) {
+        this.matKhau = null;
     }
 }

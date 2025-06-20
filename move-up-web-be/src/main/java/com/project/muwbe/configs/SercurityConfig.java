@@ -12,12 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +31,7 @@ public class SercurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -35,10 +39,12 @@ public class SercurityConfig {
         return email -> {
             TaiKhoan taiKhoan = taiKhoanRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Tài khoản không tồn tại: " + email));
-            String role = taiKhoan.getVaiTro() ? "ROLE_CLIENT" : "ROLE_EMPLOYEE";
+
+            String role = taiKhoan.getVaiTro() ? "CLIENT" : "EMPLOYEE";
+
             return User.withUsername(taiKhoan.getEmail())
                     .password(taiKhoan.getMatKhau())
-                    .roles(role.replace("ROLE_", ""))
+                    .roles(role)
                     .disabled(!"ACTIVE".equalsIgnoreCase(taiKhoan.getTrangThai()))
                     .build();
         };
@@ -50,18 +56,34 @@ public class SercurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/tai-khoan/dang-nhap").permitAll()
+                        .requestMatchers("/tai-khoan/dang-nhap", "/tai-khoan/dang-ky").permitAll()
+                        .requestMatchers("/admin/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/client/**").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
-                .securityContext(context -> context
-                        .securityContextRepository(new HttpSessionSecurityContextRepository())
+                .sessionManagement(session -> session
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
                 );
 
         return http.build();
     }
-
 }

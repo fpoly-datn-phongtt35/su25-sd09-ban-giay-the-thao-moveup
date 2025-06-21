@@ -56,8 +56,8 @@ CREATE TABLE nhan_vien (
 
 CREATE TABLE giay (
 	id BIGINT PRIMARY KEY IDENTITY(1,1),
-	ten_san_pham NVARCHAR(255),
-	mo_ta_san_pham NVARCHAR(255),
+	ten_giay NVARCHAR(255),
+	mo_ta_giay NVARCHAR(255),
 	trang_thai BIT, -- 1: ACTIVE, 0: INACTIVE
 	id_danh_muc BIGINT,
 	id_danh_muc_con BIGINT,
@@ -358,7 +358,7 @@ INSERT INTO danh_muc_con (id_danh_muc, ten_danh_muc_con, trang_thai, ngay_tao, n
 (3, N'Giày thời trang', 1, '2025-01-07', 3, '2025-01-17', 3);
 
 -- giay
-INSERT INTO giay (ten_san_pham, mo_ta_san_pham, trang_thai, id_danh_muc_con, thuong_hieu, chat_lieu, xuat_xu, kieu_dang, tu_khoa, uu_tien) VALUES
+INSERT INTO giay (ten_giay, mo_ta_giay, trang_thai, id_danh_muc_con, thuong_hieu, chat_lieu, xuat_xu, kieu_dang, tu_khoa, uu_tien) VALUES
 (N'Giày Nike Air Zoom', N'Giày thể thao chạy bộ chất lượng cao', 1, 1, N'Nike', N'Vải lưới', N'Mỹ', N'Thể thao', N'chạy, nike, thể thao', 1),
 (N'Giày Oxford nam da bò', N'Phong cách công sở cổ điển', 1, 2, N'Bally', N'Da bò', N'Italia', N'Công sở', N'da, nam, oxford', 2),
 (N'Sneaker Adidas Streetwear', N'Phong cách trẻ trung cá tính', 1, 3, N'Adidas', N'Canvas', N'Đức', N'Casual', N'adidas, sneaker, street', 3);

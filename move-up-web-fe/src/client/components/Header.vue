@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-light border-bottom shadow-sm py-2">
+  <header class="bg-light border-bottom shadow-sm py-2 sticky-top">
     <div class="container d-flex justify-content-between align-items-center">
       <!-- Logo with image and router-link -->
       <router-link to="/" class="text-decoration-none">
@@ -9,6 +9,11 @@
       <!-- Navigation -->
       <nav>
         <ul class="nav">
+          <li class="nav-item">
+            <router-link to="/products" class="nav-link">
+              Products
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link v-if="!isLoggedIn" to="#" class="nav-link" @click.prevent="login">
               Login

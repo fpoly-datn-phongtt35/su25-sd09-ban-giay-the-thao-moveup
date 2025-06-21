@@ -13,18 +13,17 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "phieu_giam_gia")
-public class PhieuGiamGia {
-
+@Table(name = "dot_giam_gia")
+public class DotGiamGia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ma_giam_gia")
-    private String maGiamGia;
+    @Column(name = "ten_dot_giam_gia")
+    private String tenDotGiamGia;
 
-    @Column(name = "ten_giam_gia")
-    private String tenGiamGia;
+    @Column(name = "mo_ta")
+    private String moTa;
 
     @Column(name = "phan_tram_giam")
     private Integer phanTramGiam;
@@ -33,25 +32,16 @@ public class PhieuGiamGia {
     private Long giaTienGiam;
 
     @Column(name = "gia_tri_toi_thieu")
-    private Long giaTriToiThieu;
+    private Long giaTriToThieu;
 
     @Column(name = "gia_tri_toi_da")
-    private Long giaTriToiDa;
-
-    @Column(name = "so_luong")
-    private Integer soLuong;
+    private Long giaTriToDa;
 
     @Column(name = "ngay_bat_dau")
     private Timestamp ngayBatDau;
 
     @Column(name = "ngay_ket_thuc")
     private Timestamp ngayKetThuc;
-
-    @Column(name = "trang_thai")
-    private Boolean trangThai;
-
-    @Column(name = "mo_ta")
-    private String moTa;
 
     @Column(name = "ngay_tao")
     private Timestamp ngayTao;

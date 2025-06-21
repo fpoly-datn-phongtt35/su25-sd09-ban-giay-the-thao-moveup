@@ -37,8 +37,9 @@ public class KhachHang {
     @Column(name = "ngay_sinh")
     private Timestamp ngaySinh;
 
-    @Column(name = "anh_dai_dien")
-    private String anhDaiDien;
+    @OneToOne
+    @JoinColumn(name = "id_anh", referencedColumnName = "id")
+    private Anh anhDaiDien;
 
     @Column(name = "ngay_tao")
     private Timestamp ngayTao;

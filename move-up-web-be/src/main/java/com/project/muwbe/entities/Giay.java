@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -17,11 +18,11 @@ public class Giay {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ten_san_pham")
-    private String tenSanPham;
+    @Column(name = "ten_giay")
+    private String tenGiay;
 
-    @Column(name = "mo_ta_san_pham")
-    private String moTaSanPham;
+    @Column(name = "mo_ta_giay")
+    private String moTaGiay;
 
     @Column(name = "trang_thai")
     private Boolean trangThai;
@@ -51,6 +52,23 @@ public class Giay {
 
     @Column(name = "uu_tien")
     private Integer uuTien;
+
+    @Column(name = "ngay_tao")
+    private Timestamp ngayTao;
+
+    @ManyToOne
+    @JoinColumn(name = "nguoi_tao", referencedColumnName = "id")
+    private TaiKhoan nguoiTao;
+
+    @Column(name = "ngay_cap_nhat")
+    private Timestamp ngayCapNhat;
+
+    @ManyToOne
+    @JoinColumn(name = "nguoi_cap_nhat", referencedColumnName = "id")
+    private TaiKhoan nguoiCapNhat;
+
+    @OneToMany(mappedBy = "giay", fetch = FetchType.LAZY)
+    private List<AnhGiay> anhGiay;
 
     @OneToMany(mappedBy = "giay", fetch = FetchType.LAZY)
     private List<ChiTietGiay> chiTietGiay;

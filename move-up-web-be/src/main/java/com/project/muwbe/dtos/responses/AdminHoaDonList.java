@@ -32,54 +32,7 @@ public class AdminHoaDonList {
     private TaiKhoan nguoiTao;
     private Timestamp ngayCapNhat;
     private TaiKhoan nguoiCapNhat;
-    private List<AdminChiTietHoaDon> chiTietHoaDon;
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class AdminChiTietHoaDon {
-        private Long id;
-        private AdminChiTietGiay chiTietGiay;
-        private Integer soLuong;
-        private Long thanhTien;
-    }
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class AdminChiTietGiay {
-        private Long id;
-        private AdminGiay giay;
-        private String sku;
-        private Long giaNhap;
-        private Long giaBan;
-        private String mauSac;
-        private Integer size;
-        private String anh;
-        private Long soLuong;
-        private Boolean trangThai;
-    }
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class AdminGiay {
-        private Long id;
-        private String tenSanPham;
-        private String moTaSanPham;
-        private Boolean trangThai;
-        private DanhMuc danhMuc;
-        private DanhMucCon danhMucCon;
-        private String thuongHieu;
-        private String chatLieu;
-        private String xuatXu;
-        private String kieuDang;
-        private String tuKhoa;
-        private Integer uuTien;
-    }
+    private List<ChiTietHoaDonList> chiTietHoaDon;
 
     public AdminHoaDonList(HoaDon hoaDon) {
         this.id = hoaDon.getId();
@@ -105,13 +58,13 @@ public class AdminHoaDonList {
         this.nguoiCapNhat = hoaDon.getNguoiCapNhat();
 
         this.chiTietHoaDon = hoaDon.getChiTietHoaDon().stream().map(ct -> {
-            AdminChiTietHoaDon dto = new AdminChiTietHoaDon();
+            ChiTietHoaDonList dto = new ChiTietHoaDonList();
             dto.setId(ct.getId());
             dto.setSoLuong(ct.getSoLuong());
             dto.setThanhTien(ct.getThanhTien());
 
             ChiTietGiay ctg = ct.getChiTietGiay();
-            AdminChiTietGiay chiTietGiayDto = new AdminChiTietGiay();
+            HoaDonChiTietGiay chiTietGiayDto = new HoaDonChiTietGiay();
             chiTietGiayDto.setId(ctg.getId());
             chiTietGiayDto.setSku(ctg.getSku());
             chiTietGiayDto.setGiaBan(ctg.getGiaBan());
@@ -123,10 +76,10 @@ public class AdminHoaDonList {
             chiTietGiayDto.setTrangThai(ctg.getTrangThai());
 
             Giay giay = ctg.getGiay();
-            AdminGiay giayDto = new AdminGiay();
+            HoaDonGiay giayDto = new HoaDonGiay();
             giayDto.setId(giay.getId());
-            giayDto.setTenSanPham(giay.getTenSanPham());
-            giayDto.setMoTaSanPham(giay.getMoTaSanPham());
+            giayDto.setTenGiay(giay.getTenGiay());
+            giayDto.setMoTaGiay(giay.getMoTaGiay());
             giayDto.setTrangThai(giay.getTrangThai());
             giayDto.setDanhMuc(giay.getDanhMuc());
             giayDto.setDanhMucCon(giay.getDanhMucCon());
@@ -136,6 +89,20 @@ public class AdminHoaDonList {
             giayDto.setKieuDang(giay.getKieuDang());
             giayDto.setTuKhoa(giay.getTuKhoa());
             giayDto.setUuTien(giay.getUuTien());
+            giayDto.setNgayTao(giay.getNgayTao());
+            giayDto.setNguoiTao(giay.getNguoiTao());
+            giayDto.setNgayCapNhat(giay.getNgayCapNhat());
+            giayDto.setNguoiCapNhat(giay.getNguoiCapNhat());
+
+            if (giay.getAnhGiay() != null) {
+                List<AnhGiayList> anhListDtos = giay.getAnhGiay().stream().map(ag -> {
+                    AnhGiayList anhDto = new AnhGiayList();
+                    anhDto.setId(ag.getId());
+                    anhDto.setAnh(ag.getAnh());
+                    return anhDto;
+                }).toList();
+                giayDto.setAnhGiay(anhListDtos);
+            }
 
             chiTietGiayDto.setGiay(giayDto);
             dto.setChiTietGiay(chiTietGiayDto);

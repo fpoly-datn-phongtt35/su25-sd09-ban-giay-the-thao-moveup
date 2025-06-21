@@ -37,8 +37,9 @@ public class ChiTietGiay {
     @Column(name = "size")
     private Integer size;
 
-    @Column(name = "anh")
-    private String anh;
+    @OneToOne
+    @JoinColumn(name = "id_anh", referencedColumnName = "id")
+    private Anh anh;
 
     @Column(name = "so_luong")
     private Long soLuong;

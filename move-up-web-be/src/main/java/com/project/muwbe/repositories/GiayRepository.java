@@ -12,5 +12,5 @@ public interface GiayRepository extends JpaRepository<Giay, Long> {
 
     Page<Giay> findAll(Pageable pageable);
 
-    Optional<Giay> findByTenSanPham(String tenSanPham);
+    Optional<Giay> findBytenGiay(String tenGiay);
 }

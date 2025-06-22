@@ -20,12 +20,12 @@ CREATE TABLE khach_hang (
 	so_dien_thoai NVARCHAR(20),
 	gioi_tinh BIT, -- 1: Nam, 0: Nu
 	ngay_sinh DATETIME,
-	anh_dai_dien NVARCHAR(255),
+	id_anh_dai_dien BIGINT,
 	ngay_tao DATETIME,
 	nguoi_tao BIGINT,
 	ngay_cap_nhat DATETIME,
 	nguoi_cap_nhat BIGINT
-)
+);
 
 CREATE TABLE dia_chi_khach_hang (
 	id BIGINT PRIMARY KEY IDENTITY(1,1),
@@ -46,13 +46,13 @@ CREATE TABLE nhan_vien (
 	so_dien_thoai NVARCHAR(20),
 	dia_chi NVARCHAR(255),
 	gioi_tinh BIT, -- 1: Nam, 0: Nu
-	anh_dai_dien NVARCHAR(255),
+	id_anh_dai_dien BIGINT,
 	vai_tro NVARCHAR(100), -- EMPLOYEE, MANAGER, ADMIN, ...
 	ngay_tao DATETIME,
 	nguoi_tao BIGINT,
 	ngay_cap_nhat DATETIME,
 	nguoi_cap_nhat BIGINT
-)
+);
 
 CREATE TABLE giay (
 	id BIGINT PRIMARY KEY IDENTITY(1,1),
@@ -66,7 +66,11 @@ CREATE TABLE giay (
 	xuat_xu NVARCHAR(255),
 	kieu_dang NVARCHAR(255),
 	tu_khoa NVARCHAR(255),
-	uu_tien INT -- Từ 1 đến vô cực, 1 là cao nhất
+	uu_tien INT, -- Từ 1 đến vô cực, 1 là cao nhất
+	ngay_tao DATETIME,
+	nguoi_tao BIGINT,
+	ngay_cap_nhat DATETIME,
+	nguoi_cap_nhat BIGINT
 )
 
 CREATE TABLE chi_tiet_giay (
@@ -77,10 +81,10 @@ CREATE TABLE chi_tiet_giay (
 	gia_ban BIGINT,
 	mau_sac NVARCHAR(100),
 	size INT,
-	anh NVARCHAR(255),
+	id_anh BIGINT,
 	so_luong BIGINT,
 	trang_thai BIT -- 1: ACTIVE, 0: INACTIVE
-)
+);
 
 CREATE TABLE danh_muc_con (
 	id BIGINT PRIMARY KEY IDENTITY(1,1),
@@ -245,10 +249,24 @@ CREATE TABLE phieu_da_su_dung (
 	ngay_tao DATETIME
 )
 
+CREATE TABLE anh (
+	id BIGINT PRIMARY KEY IDENTITY(1,1),
+	ten_anh NVARCHAR(255),
+	duong_dan NVARCHAR(255),
+	ngay_tao DATETIME
+)
+
+CREATE TABLE anh_giay (
+	id BIGINT PRIMARY KEY IDENTITY(1,1),
+	id_giay BIGINT,
+	id_anh BIGINT
+)
+
 -- Foreign keys for khach_hang
 ALTER TABLE khach_hang ADD FOREIGN KEY (id_tai_khoan) REFERENCES tai_khoan(id);
 ALTER TABLE khach_hang ADD FOREIGN KEY (nguoi_tao) REFERENCES tai_khoan(id);
 ALTER TABLE khach_hang ADD FOREIGN KEY (nguoi_cap_nhat) REFERENCES tai_khoan(id);
+ALTER TABLE khach_hang ADD FOREIGN KEY (id_anh_dai_dien) REFERENCES anh(id);
 
 -- Foreign keys for dia_chi_khach_hang
 ALTER TABLE dia_chi_khach_hang ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id);
@@ -257,6 +275,7 @@ ALTER TABLE dia_chi_khach_hang ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_
 ALTER TABLE nhan_vien ADD FOREIGN KEY (id_tai_khoan) REFERENCES tai_khoan(id);
 ALTER TABLE nhan_vien ADD FOREIGN KEY (nguoi_tao) REFERENCES tai_khoan(id);
 ALTER TABLE nhan_vien ADD FOREIGN KEY (nguoi_cap_nhat) REFERENCES tai_khoan(id);
+ALTER TABLE nhan_vien ADD FOREIGN KEY (id_anh_dai_dien) REFERENCES anh(id);
 
 -- Foreign keys for giay
 ALTER TABLE giay ADD FOREIGN KEY (id_danh_muc) REFERENCES danh_muc(id);
@@ -264,6 +283,7 @@ ALTER TABLE giay ADD FOREIGN KEY (id_danh_muc_con) REFERENCES danh_muc_con(id);
 
 -- Foreign keys for chi_tiet_giay
 ALTER TABLE chi_tiet_giay ADD FOREIGN KEY (id_giay) REFERENCES giay(id);
+ALTER TABLE chi_tiet_giay ADD FOREIGN KEY (id_anh) REFERENCES anh(id);
 
 -- Foreign keys for danh_muc_con
 ALTER TABLE danh_muc_con ADD FOREIGN KEY (id_danh_muc) REFERENCES danh_muc(id);
@@ -325,20 +345,24 @@ ALTER TABLE phieu_da_su_dung ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_ha
 ALTER TABLE phieu_da_su_dung ADD FOREIGN KEY (id_phieu_giam_gia) REFERENCES phieu_giam_gia(id);
 ALTER TABLE phieu_da_su_dung ADD FOREIGN KEY (id_hoa_don) REFERENCES hoa_don(id);
 
+-- Foreign keys for anh_giay
+ALTER TABLE anh_giay ADD FOREIGN KEY (id_giay) REFERENCES giay(id);
+ALTER TABLE anh_giay ADD FOREIGN KEY (id_anh) REFERENCES anh(id);
+
 INSERT INTO tai_khoan (email, mat_khau, vai_tro, trang_thai) VALUES 
 	('user1@mail.com', 'pass1', 1, 'ACTIVE'),
 	('user2@mail.com', 'pass2', 0, 'ACTIVE'),
 	('user3@mail.com', 'pass3', 1, 'ACTIVE')
 
-INSERT INTO khach_hang (ma_khach_hang, id_tai_khoan, ho_ten, so_dien_thoai, gioi_tinh, ngay_sinh, anh_dai_dien, ngay_tao, nguoi_tao, ngay_cap_nhat, nguoi_cap_nhat) VALUES 
-('KH001', 1, N'Khách Hàng 1', '0900000001', 1, '2024-09-10 00:00:00', 'avatar1.png', '2025-06-07 00:00:00', 1, '2025-06-07 00:00:00', 1),
-('KH002', 2, N'Khách Hàng 2', '0900000002', 0, '2024-11-15 00:00:00', 'avatar2.png', '2025-06-07 00:00:00', 2, '2025-06-07 00:00:00', 2),
-('KH003', 3, N'Khách Hàng 3', '0900000003', 1, '2024-07-21 00:00:00', 'avatar3.png', '2025-06-07 00:00:00', 3, '2025-06-07 00:00:00', 3);
+INSERT INTO khach_hang (ma_khach_hang, id_tai_khoan, ho_ten, so_dien_thoai, gioi_tinh, ngay_sinh, id_anh_dai_dien, ngay_tao, nguoi_tao, ngay_cap_nhat, nguoi_cap_nhat) VALUES 
+('KH001', 1, N'Khách Hàng 1', '0900000001', 1, '2024-09-10 00:00:00', NULL, '2025-06-07 00:00:00', 1, '2025-06-07 00:00:00', 1),
+('KH002', 2, N'Khách Hàng 2', '0900000002', 0, '2024-11-15 00:00:00', NULL, '2025-06-07 00:00:00', 2, '2025-06-07 00:00:00', 2),
+('KH003', 3, N'Khách Hàng 3', '0900000003', 1, '2024-07-21 00:00:00', NULL, '2025-06-07 00:00:00', 3, '2025-06-07 00:00:00', 3);
 
-INSERT INTO nhan_vien (ma_nhan_vien, id_tai_khoan, ho_ten, so_dien_thoai, dia_chi, gioi_tinh, anh_dai_dien, vai_tro, ngay_tao, nguoi_tao, ngay_cap_nhat, nguoi_cap_nhat) VALUES 
-('NV001', 1, N'Nhân Viên 1', '0910000001', N'Địa chỉ NV1', 1, 'nv1.jpg', 'EMPLOYEE', '2025-06-07 00:00:00', 1, '2025-06-07 00:00:00', 1),
-('NV002', 2, N'Nhân Viên 2', '0910000002', N'Địa chỉ NV2', 0, 'nv2.jpg', 'EMPLOYEE', '2025-06-07 00:00:00', 2, '2025-06-07 00:00:00', 2),
-('NV003', 3, N'Nhân Viên 3', '0910000003', N'Địa chỉ NV3', 1, 'nv3.jpg', 'EMPLOYEE', '2025-06-07 00:00:00', 3, '2025-06-07 00:00:00', 3)
+INSERT INTO nhan_vien (ma_nhan_vien, id_tai_khoan, ho_ten, so_dien_thoai, dia_chi, gioi_tinh, id_anh_dai_dien, vai_tro, ngay_tao, nguoi_tao, ngay_cap_nhat, nguoi_cap_nhat) VALUES 
+('NV001', 1, N'Nhân Viên 1', '0910000001', N'Địa chỉ NV1', 1, NULL, 'EMPLOYEE', '2025-06-07 00:00:00', 1, '2025-06-07 00:00:00', 1),
+('NV002', 2, N'Nhân Viên 2', '0910000002', N'Địa chỉ NV2', 0, NULL, 'EMPLOYEE', '2025-06-07 00:00:00', 2, '2025-06-07 00:00:00', 2),
+('NV003', 3, N'Nhân Viên 3', '0910000003', N'Địa chỉ NV3', 1, NULL, 'EMPLOYEE', '2025-06-07 00:00:00', 3, '2025-06-07 00:00:00', 3);
 
 INSERT INTO dia_chi_khach_hang(id_khach_hang, tinh_thanh_pho, quan_huyen, phuong_xa, dia_chi_cu_the, uu_tien, trang_thai) VALUES
 (1, N'TP Hà Nội', N'huyện Đông Anh', N'xã Nam Hồng', N'nhà 123', 1, 1),
@@ -364,10 +388,10 @@ INSERT INTO giay (ten_giay, mo_ta_giay, trang_thai, id_danh_muc_con, thuong_hieu
 (N'Sneaker Adidas Streetwear', N'Phong cách trẻ trung cá tính', 1, 3, N'Adidas', N'Canvas', N'Đức', N'Casual', N'adidas, sneaker, street', 3);
 
 -- chi_tiet_giay
-INSERT INTO chi_tiet_giay (id_giay, sku, gia_nhap, gia_ban, mau_sac, size, anh, so_luong, trang_thai) VALUES
-(1, 'NK-AIRZ-001', 1500000, 2500000, N'Xanh đen', 42, 'nike_air_zoom.jpg', 10, 1),
-(2, 'OX-DA-002', 1200000, 2200000, N'Nâu', 41, 'oxford_brown.jpg', 5, 1),
-(3, 'ADD-STREET-003', 1300000, 2300000, N'Trắng', 43, 'adidas_street.jpg', 8, 1);
+INSERT INTO chi_tiet_giay (id_giay, sku, gia_nhap, gia_ban, mau_sac, size, id_anh, so_luong, trang_thai) VALUES
+(1, 'NK-AIRZ-001', 1500000, 2500000, N'Xanh đen', 42, NULL, 10, 1),
+(2, 'OX-DA-002', 1200000, 2200000, N'Nâu', 41, NULL, 5, 1),
+(3, 'ADD-STREET-003', 1300000, 2300000, N'Trắng', 43, NULL, 8, 1);
 
 INSERT INTO co_so (
 	ten_cua_hang, dia_chi_cua_hang, so_dien_thoai_cua_hang, ma_so_thue_cua_hang,
@@ -424,54 +448,4 @@ INSERT INTO phieu_da_su_dung (id_khach_hang, id_phieu_giam_gia, id_hoa_don, ngay
 (2, 2, 2, '2025-06-07 05:26:02'),
 (3, 3, 3, '2025-06-07 05:26:02'); */
 
-SELECT
-    hd.id AS hoa_don_id,
-    hd.ma_hoa_don,
-    hd.ten_khach_hang,
-    hd.so_dien_thoai_khach_hang,
-    hd.email_khach_hang,
-    hd.dia_chi_khach_hang,
-    hd.ghi_chu,
-    hd.ghi_chu_khach_hang,
-    hd.don_van_chuyen,
-    hd.tong_thanh_toan,
-    hd.tien_khach_tra,
-    hd.loai_hinh_thanh_toan,
-    hd.trang_thai_giao_dich,
-    hd.trang_thai_hoa_don,
-    hd.ngay_tao,
-    hd.ngay_cap_nhat,
-
-    -- Co so
-    cs.id AS co_so_id,
-    cs.ten_cua_hang,
-    cs.dia_chi_cua_hang,
-    cs.so_dien_thoai_cua_hang,
-
-    -- Khach hang
-    kh.id AS khach_hang_id,
-    kh.ma_khach_hang,
-    kh.ho_ten AS ten_khach_hang_he_thong,
-    kh.so_dien_thoai AS sdt_khach_hang_he_thong,
-
-    -- Nhan vien
-    nv.id AS nhan_vien_id,
-    nv.ma_nhan_vien,
-    nv.ho_ten AS ten_nhan_vien,
-    nv.vai_tro AS vai_tro_nhan_vien,
-
-    -- Tai khoan nguoi tao
-    tk_tao.id AS tai_khoan_tao_id,
-    tk_tao.email AS email_nguoi_tao,
-
-    -- Tai khoan nguoi cap nhat
-    tk_capnhat.id AS tai_khoan_cap_nhat_id,
-    tk_capnhat.email AS email_nguoi_cap_nhat
-
-FROM hoa_don hd
-LEFT JOIN co_so cs ON hd.id_co_so = cs.id
-LEFT JOIN khach_hang kh ON hd.id_khach_hang = kh.id
-LEFT JOIN nhan_vien nv ON hd.id_nhan_vien = nv.id
-LEFT JOIN tai_khoan tk_tao ON hd.nguoi_tao = tk_tao.id
-LEFT JOIN tai_khoan tk_capnhat ON hd.nguoi_cap_nhat = tk_capnhat.id
-ORDER BY hd.ngay_tao DESC;
+SELECT * FROM chi_tiet_giay;

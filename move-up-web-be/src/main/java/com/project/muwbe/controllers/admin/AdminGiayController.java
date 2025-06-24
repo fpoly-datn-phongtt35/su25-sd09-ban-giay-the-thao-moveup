@@ -1,4 +1,4 @@
-package com.project.muwbe.controllers;
+package com.project.muwbe.controllers.admin;
 import com.project.muwbe.dtos.requests.AdminGiayForm;
 import com.project.muwbe.dtos.responses.GiayList;
 import com.project.muwbe.entities.*;
@@ -19,9 +19,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/giay")
+@RequestMapping("/api/admin/giay")
 @CrossOrigin(origins = "*")
-public class GiayController {
+public class AdminGiayController {
     @Autowired
     private GiayRepository giayRepository;
 
@@ -36,8 +36,10 @@ public class GiayController {
 
     @Autowired
     private TaiKhoanRepository taiKhoanRepository;
+
     @Autowired
     private AnhRepository anhRepository;
+
     @Autowired
     private AnhGiayRepository anhGiayRepository;
 

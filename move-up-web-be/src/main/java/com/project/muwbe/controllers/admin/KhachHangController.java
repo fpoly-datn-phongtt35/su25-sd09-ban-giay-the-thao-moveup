@@ -1,4 +1,4 @@
-package com.project.muwbe.controllers;
+package com.project.muwbe.controllers.admin;
 
 import com.project.muwbe.dtos.requests.AdminKhachHangForm;
 import com.project.muwbe.entities.KhachHang;

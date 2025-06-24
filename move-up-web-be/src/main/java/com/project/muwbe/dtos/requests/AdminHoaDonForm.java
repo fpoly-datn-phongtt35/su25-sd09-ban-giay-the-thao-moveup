@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.List;@AllArgsConstructor
+import java.util.List;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-
-
 public class AdminHoaDonForm {
     private String maHoaDon;
     private Long idCoSo;

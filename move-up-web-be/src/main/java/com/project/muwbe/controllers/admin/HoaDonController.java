@@ -1,4 +1,4 @@
-package com.project.muwbe.controllers;
+package com.project.muwbe.controllers.admin;
 
 import com.project.muwbe.dtos.requests.AdminHoaDonForm;
 import com.project.muwbe.dtos.responses.AdminHoaDonList;

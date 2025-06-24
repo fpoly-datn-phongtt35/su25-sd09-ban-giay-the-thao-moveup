@@ -1,8 +1,6 @@
-package com.project.muwbe.controllers;
+package com.project.muwbe.controllers.admin;
 
 import com.project.muwbe.dtos.requests.AdminDanhMucConForm;
-import com.project.muwbe.dtos.requests.AdminDanhMucForm;
-import com.project.muwbe.entities.DanhMuc;
 import com.project.muwbe.entities.DanhMucCon;
 import com.project.muwbe.repositories.DanhMucConRepository;
 import com.project.muwbe.repositories.DanhMucRepository;

@@ -16,11 +16,12 @@
           <div v-else class="bg-secondary" style="height: 150px;"></div>
 
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ item.tenGiay }}</h5>
-            <p class="card-text text-muted">{{ item.moTaGiay }}</p>
-            <div class="mt-auto">
-              <button class="btn btn-primary w-100">Add to Cart</button>
-            </div>
+            <h5 class="card-title">
+              <router-link :to="`/product/${item.id}`" class="product-link">
+                {{ item.tenGiay }}
+              </router-link>
+            </h5>
+            <p class="card-text text-muted">{{ getPriceRange(item) }}</p>
           </div>
         </div>
       </div>
@@ -42,10 +43,20 @@ export default {
     async fetchProducts() {
       try {
         const response = await axios.get('/giay')
-        this.products = response.data.content // Adjust if structure is different
+        this.products = response.data.content
       } catch (error) {
         console.error('❌ Failed to load products:', error)
       }
+    },
+    getPriceRange(item) {
+      const prices = item.chiTietGiay?.map(ct => ct.giaBan).filter(p => typeof p === 'number')
+      if (!prices || prices.length === 0) return 'Chưa có giá'
+
+      const min = Math.min(...prices)
+      const max = Math.max(...prices)
+
+      if (min === max) return `${min.toLocaleString()}₫`
+      return `${min.toLocaleString()}₫ ~ ${max.toLocaleString()}₫`
     }
   },
   mounted() {
@@ -53,4 +64,17 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.product-link {
+  color: #212529; /* Bootstrap's text-dark */
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.product-link:hover {
+  color: #0d6efd; /* Bootstrap's primary blue */
+}
+</style>
+
 

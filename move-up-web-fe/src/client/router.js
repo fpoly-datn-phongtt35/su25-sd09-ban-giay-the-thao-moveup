@@ -3,6 +3,7 @@ import Layout from '@/client/layouts/Layout.vue'
 
 import TrangChu from '@/client/views/TrangChu.vue'
 import Giay from "@/client/views/Giay.vue";
+import ChiTietGiay from "@/client/views/ChiTietGiay.vue";
 
 const routes = [
     {
@@ -11,7 +12,7 @@ const routes = [
         children: [
             { path: '', component: TrangChu },
             { path: 'giay', component: Giay },
-            { path: 'giay/:id', component: Giay },
+            { path: 'giay/:id', component: ChiTietGiay },
         ]
     }
 ]

@@ -1,7 +1,7 @@
 <template>
   <header class="bg-light border-bottom shadow-sm py-2 sticky-top">
     <div class="container d-flex justify-content-between align-items-center">
-      <!-- Logo with image and router-link -->
+      <!-- Logo -->
       <router-link to="/" class="text-decoration-none">
         <img src="@/assets/logo.jpg" alt="ShopEasy Logo" height="60"/>
       </router-link>
@@ -10,17 +10,16 @@
       <nav>
         <ul class="nav">
           <li class="nav-item">
-            <router-link to="/products" class="nav-link">
+            <router-link to="/giay" class="nav-link">
               Products
             </router-link>
           </li>
           <li class="nav-item">
             <router-link v-if="!isLoggedIn" to="#" class="nav-link" @click.prevent="login">
-              Login
+              <font-awesome-icon icon="right-to-bracket" />
             </router-link>
-            <router-link v-else to="/cart" class="nav-link">
-              Cart
-            </router-link>
+            <!-- Show cart modal button -->
+            <cart-modal v-else></cart-modal>
           </li>
         </ul>
       </nav>
@@ -29,18 +28,22 @@
 </template>
 
 <script>
+import CartModal from "@/client/components/CartModal.vue";
+
 export default {
-  name: 'Header',
+  components: {
+    CartModal
+  },
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
     }
   },
   methods: {
     login() {
       // Simulate login success
       this.isLoggedIn = true
-    }
+    },
   }
 }
 </script>

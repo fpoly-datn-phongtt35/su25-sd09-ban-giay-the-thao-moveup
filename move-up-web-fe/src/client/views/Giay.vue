@@ -17,7 +17,7 @@
 
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">
-              <router-link :to="`/product/${item.id}`" class="product-link">
+              <router-link :to="`/giay/${item.id}`" class="product-link">
                 {{ item.tenGiay }}
               </router-link>
             </h5>
@@ -33,7 +33,6 @@
 import axios from 'axios'
 
 export default {
-  name: 'Products',
   data() {
     return {
       products: [],
@@ -42,7 +41,7 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await axios.get('/giay')
+        const response = await axios.get('/api/client/giay/productPage')
         this.products = response.data.content
       } catch (error) {
         console.error('❌ Failed to load products:', error)

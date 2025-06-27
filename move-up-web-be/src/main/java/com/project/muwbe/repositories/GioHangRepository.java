@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface GioHangRepository extends JpaRepository<GioHang, Long> {
     Optional<GioHang> getGioHangByKhachHang(KhachHang khachHang);
+
+    Optional<GioHang> findFirstByKhachHangAndTrangThaiFalseOrderByNgayTaoDesc(KhachHang khachHang);
 }

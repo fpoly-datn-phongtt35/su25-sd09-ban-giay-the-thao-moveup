@@ -38,8 +38,9 @@ public class NhanVien {
     @Column(name = "gioi_tinh")
     private Boolean gioiTinh;
 
-    @Column(name = "anh_dai_dien")
-    private String anhDaiDien;
+    @OneToOne
+    @JoinColumn(name = "id_anh", referencedColumnName = "id")
+    private Anh anh;
 
     @Column(name = "vai_tro")
     private String vaiTro;

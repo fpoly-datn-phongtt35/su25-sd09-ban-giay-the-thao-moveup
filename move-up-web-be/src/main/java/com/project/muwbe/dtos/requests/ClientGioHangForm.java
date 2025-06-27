@@ -14,25 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ClientGioHangForm {
-    private Long id;
     private Long idKhachHang;
-    private Integer tongSoLuong;
-    private Long tongTien;
-    private Boolean trangThai;
-    private Timestamp ngayTao;
-    private Long idNguoiTao;
-    private Timestamp ngayCapNhat;
-    private Long idNguoiCapNhat;
-    private List<ClientChiTietGioHang> chiTietGioHang;
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class ClientChiTietGioHang {
-        private Long id;
-        private Long idChiTietGiay;
-        private Integer soLuong;
-        private Long thanhTien;
-    }
+    private Long idChiTietGiay;
+    private Integer soLuong;
 }

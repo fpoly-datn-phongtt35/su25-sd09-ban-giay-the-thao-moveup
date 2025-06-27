@@ -1,9 +1,6 @@
 package com.project.muwbe.dtos.responses;
 
-import com.project.muwbe.entities.ChiTietGiay;
-import com.project.muwbe.entities.GioHang;
-import com.project.muwbe.entities.KhachHang;
-import com.project.muwbe.entities.TaiKhoan;
+import com.project.muwbe.entities.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +8,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,10 +50,39 @@ public class ClientGioHang {
 
         this.chiTietGioHangList = gioHang.getChiTietGioHang().stream().map(ct -> {
             ChiTietGiay ctg = ct.getChiTietGiay();
+            Giay giay = ctg.getGiay();
+
+            HoaDonGiay giayDTO = new HoaDonGiay();
+            giayDTO.setId(giay.getId());
+            giayDTO.setTenGiay(giay.getTenGiay());
+            giayDTO.setMoTaGiay(giay.getMoTaGiay());
+            giayDTO.setTrangThai(giay.getTrangThai());
+            giayDTO.setDanhMuc(giay.getDanhMuc());
+            giayDTO.setDanhMucCon(giay.getDanhMucCon());
+            giayDTO.setThuongHieu(giay.getThuongHieu());
+            giayDTO.setChatLieu(giay.getChatLieu());
+            giayDTO.setXuatXu(giay.getXuatXu());
+            giayDTO.setKieuDang(giay.getKieuDang());
+            giayDTO.setTuKhoa(giay.getTuKhoa());
+            giayDTO.setUuTien(giay.getUuTien());
+            giayDTO.setNgayTao(giay.getNgayTao());
+            giayDTO.setNguoiTao(giay.getNguoiTao());
+            giayDTO.setNgayCapNhat(giay.getNgayCapNhat());
+            giayDTO.setNguoiCapNhat(giay.getNguoiCapNhat());
+            if (giay.getAnhGiay() != null) {
+                giayDTO.setAnhGiay(
+                        giay.getAnhGiay().stream()
+                                .map(ag -> new AnhGiayList(ag.getId(), ag.getAnh()))
+                                .collect(Collectors.toList())
+                );
+            } else {
+                giayDTO.setAnhGiay(null);
+            }
 
             HoaDonChiTietGiay dto = new HoaDonChiTietGiay();
             dto.setId(ctg.getId());
             dto.setSku(ctg.getSku());
+            dto.setGiay(giayDTO);
             dto.setGiaNhap(ctg.getGiaNhap());
             dto.setGiaBan(ctg.getGiaBan());
             dto.setMauSac(ctg.getMauSac());

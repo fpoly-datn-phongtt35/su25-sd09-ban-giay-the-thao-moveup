@@ -2,7 +2,6 @@ package com.project.muwbe.controllers;
 
 import com.project.muwbe.entities.Anh;
 import com.project.muwbe.repositories.AnhRepository;
-import org.hibernate.dialect.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
